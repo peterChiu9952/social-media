@@ -1,5 +1,6 @@
 package com.peter.post;
 
+import com.peter.user.User;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -18,10 +19,9 @@ public class Post {
     )
     private Long postId;
 
-    @Column(
-            nullable = false
-    )
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private User user;
 
     @Column(
             nullable = false
@@ -37,8 +37,8 @@ public class Post {
     public Post() {
     }
 
-    public Post(Long userId, String content, Date createdAt) {
-        this.userId = userId;
+    public Post(User user, String content, Date createdAt) {
+        this.user = user;
         this.content = content;
         this.createdAt = createdAt;
     }
@@ -51,12 +51,12 @@ public class Post {
         this.postId = postId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long user) {
-        this.userId = user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getContent() {
@@ -80,19 +80,19 @@ public class Post {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return Objects.equals(postId, post.postId) && Objects.equals(userId, post.userId) && Objects.equals(content, post.content) && Objects.equals(createdAt, post.createdAt);
+        return Objects.equals(postId, post.postId) && Objects.equals(user, post.user) && Objects.equals(content, post.content) && Objects.equals(createdAt, post.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(postId, userId, content, createdAt);
+        return Objects.hash(postId, user, content, createdAt);
     }
 
     @Override
     public String toString() {
         return "Post{" +
                 "postId=" + postId +
-                ", userId=" + userId +
+                ", user=" + user +
                 ", content='" + content + '\'' +
                 ", createdAt=" + createdAt +
                 '}';

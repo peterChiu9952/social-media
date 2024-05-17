@@ -40,12 +40,12 @@ public class SocialMediaApplication {
 			userRepository.saveAll(List.of(user1, user2));
 
 			Post post1 = new Post(
-					user1.getUserId(),
+					user1,
 					"post1",
 					new Date()
 			);
 			Post post2 = new Post(
-					user2.getUserId(),
+					user2,
 					"post2",
 					new Date()
 			);

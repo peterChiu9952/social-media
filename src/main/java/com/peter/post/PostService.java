@@ -34,10 +34,10 @@ public class PostService {
     }
 
     public void createPost(PostRequest request, String token) {
-        Long userId = getUserIdByToken(token);
+        User user = getUserByToken(token);
 
         postDao.insertPost(new Post(
-                userId,
+                user,
                 request.content(),
                 new Date()
         ));
@@ -47,8 +47,8 @@ public class PostService {
         Post post = postDao.selectPostByPostId(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("post with postId [%s] not found.".formatted(postId)));
 
-        Long userId = getUserIdByToken(token);
-        if (!Objects.equals(post.getUserId(), userId)) {
+        User user = getUserByToken(token);
+        if (!Objects.equals(post.getUser().getUserId(), user.getUserId())) {
             throw new RequestValidationException("You do not have authorization to perform this action.");
         }
 
@@ -58,8 +58,8 @@ public class PostService {
     public void updatePost(Long postId, PostRequest request, String token) {
         Post post = getPostByPostId(postId);
 
-        Long userId = getUserIdByToken(token);
-        if (!Objects.equals(post.getUserId(), userId)) {
+        User user = getUserByToken(token);
+        if (!Objects.equals(post.getUser().getUserId(), user.getUserId())) {
             throw new RequestValidationException("You do not have authorization to perform this action.");
         }
 
@@ -77,10 +77,9 @@ public class PostService {
         postDao.updatePost(post);
     }
 
-    private Long getUserIdByToken(String token) {
+    private User getUserByToken(String token) {
         String username = jwtUtil.getUsernameFromToken(token);
-        User user = userDao.selectUserByUsername(username)
+        return userDao.selectUserByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("user with username [%s] not found.".formatted(username)));
-        return user.getUserId();
     }
 }
