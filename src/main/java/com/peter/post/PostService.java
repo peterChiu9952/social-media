@@ -10,26 +10,33 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
 
     private final PostDao postDao;
     private final UserDao userDao;
+    private final PostResponseMapper postResponseMapper;
     private final JWTUtil jwtUtil;
 
-    public PostService(PostDao postDao, UserDao userDao, JWTUtil jwtUtil) {
+    public PostService(PostDao postDao, UserDao userDao, PostResponseMapper postResponseMapper, JWTUtil jwtUtil) {
         this.postDao = postDao;
         this.userDao = userDao;
+        this.postResponseMapper = postResponseMapper;
         this.jwtUtil = jwtUtil;
     }
 
-    public List<Post> getAllPosts() {
-        return postDao.selectAllPosts();
+    public List<PostResponse> getAllPosts() {
+        return postDao.selectAllPosts()
+                .stream()
+                .map(postResponseMapper)
+                .collect(Collectors.toList());
     }
 
-    public Post getPostByPostId(Long postId) {
+    public PostResponse getPostByPostId(Long postId) {
         return postDao.selectPostByPostId(postId)
+                .map(postResponseMapper)
                 .orElseThrow(() -> new ResourceNotFoundException("post with postId [%s] not found.".formatted(postId)));
     }
 
@@ -56,7 +63,8 @@ public class PostService {
     }
 
     public void updatePost(Long postId, PostRequest request, String token) {
-        Post post = getPostByPostId(postId);
+        Post post = postDao.selectPostByPostId(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("post with postId [%s] not found.".formatted(postId)));
 
         User user = getUserByToken(token);
         if (!Objects.equals(post.getUser().getUserId(), user.getUserId())) {
