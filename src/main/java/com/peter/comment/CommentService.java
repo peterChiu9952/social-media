@@ -46,20 +46,20 @@ public class CommentService {
     public void createComment(CommentRequest request, String token) {
         Post post = postDao.selectPostByPostId(request.postId()).orElseThrow(()
                 -> new ResourceNotFoundException("post with postId [%s] not found.".formatted(request.postId())));
-        Long userId = getUserIdByToken(token);
+        User user = getUserByToken(token);
+
 
         commentDao.insertComment(new Comment(
-                userId,
+                user,
                 post,
                 request.content(),
                 new Date()
         ));
     }
 
-    private Long getUserIdByToken(String token) {
+    private User getUserByToken(String token) {
         String username = jwtUtil.getUsernameFromToken(token);
-        User user = userDao.selectUserByUsername(username)
+        return userDao.selectUserByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("user with username [%s] not found.".formatted(username)));
-        return user.getUserId();
     }
 }

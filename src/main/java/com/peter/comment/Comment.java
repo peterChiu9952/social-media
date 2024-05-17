@@ -1,6 +1,7 @@
 package com.peter.comment;
 
 import com.peter.post.Post;
+import com.peter.user.User;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -19,10 +20,9 @@ public class Comment {
     )
     private Long commentId;
 
-    @Column(
-            nullable = false
-    )
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "postId", referencedColumnName = "postId")
@@ -42,8 +42,8 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Long userId, Post post, String content, Date createdAt) {
-        this.userId = userId;
+    public Comment(User user, Post post, String content, Date createdAt) {
+        this.user = user;
         this.post = post;
         this.content = content;
         this.createdAt = createdAt;
@@ -57,12 +57,12 @@ public class Comment {
         this.commentId = commentId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long user) {
-        this.userId = user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Post getPost() {
@@ -94,19 +94,19 @@ public class Comment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return Objects.equals(commentId, comment.commentId) && Objects.equals(userId, comment.userId) && Objects.equals(post, comment.post) && Objects.equals(content, comment.content) && Objects.equals(createdAt, comment.createdAt);
+        return Objects.equals(commentId, comment.commentId) && Objects.equals(user, comment.user) && Objects.equals(post, comment.post) && Objects.equals(content, comment.content) && Objects.equals(createdAt, comment.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commentId, userId, post, content, createdAt);
+        return Objects.hash(commentId, user, post, content, createdAt);
     }
 
     @Override
     public String toString() {
         return "Comment{" +
                 "commentId=" + commentId +
-                ", userId=" + userId +
+                ", user=" + user +
                 ", post=" + post +
                 ", content='" + content + '\'' +
                 ", createdAt=" + createdAt +

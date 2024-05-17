@@ -12,7 +12,7 @@ public class CommentResponseMapper implements Function<Comment, CommentResponse>
         return new CommentResponse(
                 comment.getCommentId(),
                 comment.getPost().getPostId(),
-                comment.getUserId(),
+                comment.getUser().getUserId(),
                 comment.getContent(),
                 comment.getCreatedAt()
         );

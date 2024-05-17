@@ -52,31 +52,31 @@ public class SocialMediaApplication {
 			postRepository.saveAll(List.of(post1, post2));
 
 			Comment comment1 = new Comment(
-					user1.getUserId(),
+					user1,
 					post1,
 					"comment1",
 					new Date()
 			);
 			Comment comment2 = new Comment(
-					user2.getUserId(),
+					user2,
 					post1,
 					"comment2",
 					new Date()
 			);
 			Comment comment3 = new Comment(
-					user2.getUserId(),
+					user2,
 					post2,
 					"comment3",
 					new Date()
 			);
 			Comment comment4 = new Comment(
-					user1.getUserId(),
+					user1,
 					post2,
 					"comment4",
 					new Date()
 			);
 			Comment comment5 = new Comment(
-					user2.getUserId(),
+					user2,
 					post2,
 					"comment5",
 					new Date()
