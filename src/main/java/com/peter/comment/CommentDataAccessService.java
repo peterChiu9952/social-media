@@ -25,6 +25,11 @@ public class CommentDataAccessService implements CommentDao {
     }
 
     @Override
+    public void deleteCommentsByPostId(Long postId) {
+        commentRepository.deleteByPostPostId(postId);
+    }
+
+    @Override
     public void insertComment(Comment comment) {
         commentRepository.save(comment);
     }

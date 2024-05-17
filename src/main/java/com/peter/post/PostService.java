@@ -1,11 +1,14 @@
 package com.peter.post;
 
+import com.peter.comment.Comment;
+import com.peter.comment.CommentDao;
 import com.peter.exception.RequestValidationException;
 import com.peter.exception.ResourceNotFoundException;
 import com.peter.jwt.JWTUtil;
 import com.peter.user.User;
 import com.peter.user.UserDao;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -17,12 +20,14 @@ public class PostService {
 
     private final PostDao postDao;
     private final UserDao userDao;
+    private final CommentDao commentDao;
     private final PostResponseMapper postResponseMapper;
     private final JWTUtil jwtUtil;
 
-    public PostService(PostDao postDao, UserDao userDao, PostResponseMapper postResponseMapper, JWTUtil jwtUtil) {
+    public PostService(PostDao postDao, UserDao userDao, CommentDao commentDao, PostResponseMapper postResponseMapper, JWTUtil jwtUtil) {
         this.postDao = postDao;
         this.userDao = userDao;
+        this.commentDao = commentDao;
         this.postResponseMapper = postResponseMapper;
         this.jwtUtil = jwtUtil;
     }
@@ -50,6 +55,7 @@ public class PostService {
         ));
     }
 
+    @Transactional
     public void deletePost(Long postId, String token) {
         Post post = postDao.selectPostByPostId(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("post with postId [%s] not found.".formatted(postId)));
@@ -59,6 +65,7 @@ public class PostService {
             throw new RequestValidationException("You do not have authorization to perform this action.");
         }
 
+        commentDao.deleteCommentsByPostId(postId);
         postDao.deletePost(postId);
     }
 

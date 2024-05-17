@@ -8,6 +8,7 @@ public interface CommentDao {
     List<Comment> selectAllComments();
 
     List<Comment> selectCommentsByPostId(Long postId);
+    void deleteCommentsByPostId(Long postId);
 
     void insertComment(Comment comment);
 }
