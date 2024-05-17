@@ -62,9 +62,8 @@ initialize();
         prepend-icon="mdi-account"
         variant="outlined"
         :subtitle="props.post.createdAt"
-        :title="props.post.userId"
+        :title="props.post.username"
     >
-        <v-img :src="props.post.image" cover></v-img>
         <v-card-text>{{ props.post.content }}</v-card-text>
         <template v-slot:append v-if="isAuthor">
             <v-btn
@@ -92,7 +91,7 @@ initialize();
                         v-for="comment in comments"
                         :key="comment.commentId"
                         :title="comment.content"
-                        :subtitle="comment.userId"
+                        :subtitle="comment.username"
                     ></v-list-item>
                 </v-list>
                 <v-card-actions v-if="store.state.isLogin">
