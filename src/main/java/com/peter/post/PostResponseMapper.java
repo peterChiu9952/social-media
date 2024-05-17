@@ -11,6 +11,7 @@ public class PostResponseMapper implements Function<Post, PostResponse> {
     public PostResponse apply(Post post) {
         return new PostResponse(
                 post.getPostId(),
+                post.getUser().getUserId(),
                 post.getUser().getUsername(),
                 post.getContent(),
                 post.getCreatedAt()

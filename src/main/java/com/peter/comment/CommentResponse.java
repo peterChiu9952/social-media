@@ -4,8 +4,9 @@ import java.util.Date;
 
 public record CommentResponse(
         Long commentId,
-        Long userId,
         Long postId,
+        Long userId,
+        String username,
         String content,
         Date createdAt
 ) {
