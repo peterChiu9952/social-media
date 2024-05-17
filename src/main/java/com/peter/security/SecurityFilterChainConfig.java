@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +33,14 @@ public class SecurityFilterChainConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers
+                        .xssProtection(xss -> xss
+                                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
+                        )
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives("script-src 'self'")
+                        )
+                )
                 .authorizeHttpRequests((authorize) ->
                         authorize
                                 .requestMatchers(
