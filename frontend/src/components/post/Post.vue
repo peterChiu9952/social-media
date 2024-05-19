@@ -13,7 +13,7 @@ const props = defineProps({
         createdAt: Date,
     },
 });
-const emit = defineEmits(["refresh"])
+const emit = defineEmits(["refresh"]);
 
 const store = useStore();
 
@@ -22,6 +22,8 @@ const showEditDialog = ref(false);
 const newComment = ref("");
 const editedPost = ref(props.post.content);
 const comments = ref([]);
+const commentInputField = ref();
+const postInputField = ref();
 const isAuthor = props.post.userId === store.state.userId;
 
 const getComments = () => {
@@ -30,29 +32,35 @@ const getComments = () => {
     });
 };
 
-const handleCreatComment = () => {
-    createComment(props.post.postId, newComment.value).then(() => {
-        newComment.value = "";
-        getComments();
-    });
+const handleCreatComment = async () => {
+    const formValidate = await commentInputField.value.validate();
+    if (formValidate.valid) {
+        createComment(props.post.postId, newComment.value).then(() => {
+            newComment.value = "";
+            getComments();
+        });
+    }
 };
 
 const handleDeletePost = () => {
     deletePost(props.post.postId).then(() => {
         emit("refresh");
     });
-}
+};
 
-const handleEditPost = () => {
-    updatePost(props.post.postId, editedPost.value).then(() => {
-        showEditDialog.value = false;
-        emit("refresh");
-    })
-}
+const handleEditPost = async () => {
+    const formValidate = await postInputField.value.validate();
+    if (formValidate.valid) {
+        updatePost(props.post.postId, editedPost.value).then(() => {
+            showEditDialog.value = false;
+            emit("refresh");
+        });
+    }
+};
 
 const initialize = () => {
     getComments();
-}
+};
 
 initialize();
 </script>
@@ -72,7 +80,11 @@ initialize();
                 size="small"
                 @click="showEditDialog = true"
             ></v-btn>
-            <v-btn icon="mdi-delete" size="small" @click="handleDeletePost"></v-btn>
+            <v-btn
+                icon="mdi-delete"
+                size="small"
+                @click="handleDeletePost"
+            ></v-btn>
         </template>
         <v-card-actions>
             <v-spacer></v-spacer>
@@ -100,6 +112,9 @@ initialize();
                         label="content"
                         variant="outlined"
                         v-model="newComment"
+                        type="text"
+                        :rules="[(v) => !!v || 'Content is required']"
+                        ref="commentInputField"
                     ></v-textarea>
                     <v-btn @click="handleCreatComment">Comment</v-btn>
                 </v-card-actions>
@@ -113,6 +128,9 @@ initialize();
                 label="content"
                 variant="outlined"
                 v-model="editedPost"
+                type="text"
+                :rules="[(v) => !!v || 'Content is required']"
+                ref="postInputField"
             ></v-textarea>
             <v-btn @click="handleEditPost">submit</v-btn>
         </v-card>

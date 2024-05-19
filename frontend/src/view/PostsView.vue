@@ -7,15 +7,19 @@ import { getPosts, createPost } from "../api/post";
 const posts = ref([]);
 const showEditDialog = ref(false);
 const newPostContent = ref("");
+const inputField = ref();
 
 const store = useStore();
 
-const handleCreatePost = () => {
-    createPost(newPostContent.value).then(() => {
-        showEditDialog.value = false;
-        newPostContent.value = "";
-        refresh();
-    });
+const handleCreatePost = async () => {
+    const formValidate = await inputField.value.validate();
+    if (formValidate.valid) {
+        createPost(newPostContent.value).then(() => {
+            showEditDialog.value = false;
+            newPostContent.value = "";
+            refresh();
+        });
+    }
 };
 
 const refresh = () => {
@@ -40,6 +44,9 @@ refresh();
                 label="content"
                 variant="outlined"
                 v-model="newPostContent"
+                type="text"
+                :rules="[(v) => !!v || 'Content is required']"
+                ref="inputField"
             ></v-textarea>
             <v-btn @click="handleCreatePost">Create</v-btn>
         </v-card>
