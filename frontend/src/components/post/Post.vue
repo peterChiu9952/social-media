@@ -20,7 +20,7 @@ const store = useStore();
 const showComment = ref(false);
 const showEditDialog = ref(false);
 const newComment = ref("");
-const editedComment = ref(props.post.content);
+const editedPost = ref(props.post.content);
 const comments = ref([]);
 const isAuthor = props.post.userId === store.state.userId;
 
@@ -44,7 +44,7 @@ const handleDeletePost = () => {
 }
 
 const handleEditPost = () => {
-    updatePost(props.post.postId, editedComment.value).then(() => {
+    updatePost(props.post.postId, editedPost.value).then(() => {
         showEditDialog.value = false;
         emit("refresh");
     })
@@ -110,9 +110,9 @@ initialize();
     <v-dialog v-model="showEditDialog" width="500px">
         <v-card prepend-icon="mdi-pencil" title="Edit Post">
             <v-textarea
-                label="Label"
+                label="content"
                 variant="outlined"
-                v-model="editedComment"
+                v-model="editedPost"
             ></v-textarea>
             <v-btn @click="handleEditPost">submit</v-btn>
         </v-card>
