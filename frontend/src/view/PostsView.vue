@@ -31,7 +31,9 @@ refresh();
 </script>
 
 <template>
-    <v-btn v-if="store.state.isLogin" @click="showEditDialog = true">New Post</v-btn>
+    <v-btn v-if="store.state.isLogin" @click="showEditDialog = true"
+        >New Post</v-btn
+    >
     <v-dialog v-model="showEditDialog" width="500px">
         <v-card prepend-icon="mdi-pencil" title="create Post">
             <v-textarea
@@ -45,7 +47,7 @@ refresh();
 
     <div v-for="post in posts" :key="post.postId">
         <Post :post="post" @refresh="refresh" />
-    </div>    
+    </div>
 </template>
 
 <style scoped></style>
