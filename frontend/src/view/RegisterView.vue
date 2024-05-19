@@ -5,10 +5,9 @@ import { register } from "../api/user";
 
 const router = useRouter();
 
-const username = ref("");
+const mobile = ref("");
 const email = ref("");
 const password = ref("");
-const coverImage = ref("");
 const biography = ref("");
 
 const form = ref();
@@ -16,7 +15,7 @@ const form = ref();
 const onReguster = async () => {
     const formValidate = await form.value.validate();
     if (formValidate.valid) {
-        register(username.value, email.value, password.value, coverImage.value, biography.value)
+        register(mobile.value, email.value, password.value, biography.value)
         .then(() => {
             router.push("/");
         });
@@ -28,19 +27,23 @@ const onReguster = async () => {
     <div style="width: 600px">
         <v-form @submit.prevent ref="form">
             <v-text-field
-                v-model="username"
-                :rules="[(v) => !!v || 'username is required']"
-                label="username"
+                v-model="mobile"
+                :rules="[(v) => /^09\d{8}$/.test(v) || 'Must be a valid Taiwan mobile number']"
+                label="mobile"
+                type="text"
+                autofocus
             ></v-text-field>
             <v-text-field
                 v-model="email"
-                :rules="[(v) => !!v || 'email is required']"
+                :rules="[(v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Must be a valid email']"
                 label="email"
+                type="email"
             ></v-text-field>
             <v-text-field
                 v-model="password"
-                :rules="[(v) => !!v || 'password is required']"
+                :rules="[(v) => !!v || 'Password is required']"
                 label="password"
+                type="password"
             ></v-text-field>
             <v-textarea
                 v-model="biography"
