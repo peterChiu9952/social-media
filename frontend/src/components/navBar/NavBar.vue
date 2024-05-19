@@ -15,12 +15,7 @@ const goToRegister = () => {
     router.push("/register");
 };
 const logout = () => {
-    store.dispatch("setAuth", {
-        token: "",
-        isLogin: false,
-        userId: "",
-    });
-    router.push("/");
+    router.push("/logout");
 };
 </script>
 

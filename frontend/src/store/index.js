@@ -22,6 +22,13 @@ export const store = createStore({
                 isLogin: options.isLogin,
                 userId: options.userId
             });
+        },
+        clearAuth(context, options) {
+            context.commit('V', {
+                token: "",
+                isLogin: false,
+                userId: ""
+            });
         }
     }
 })

@@ -1,13 +1,23 @@
-import { createMemoryHistory, createRouter } from 'vue-router'
+import { createMemoryHistory, createRouter } from "vue-router"
+import { store } from "./store/index"
 
-import PostsView from "./view/PostsView.vue";
+import PostsView from "./view/PostsView.vue"
 import LoginView from "./view/LoginView.vue"
 import RegisterView from "./view/RegisterView.vue"
 
 const routes = [
-    { path: '/', component: PostsView },
-    { path: '/login', component: LoginView },
-    { path: '/register', component: RegisterView },
+    { path: "/", name: "home", redirect: "/posts" },
+    { path: "/posts", name: "posts", component: PostsView },
+    { path: "/login", name: "login", component: LoginView },
+    {
+        path: "/logout",
+        name: "logout",
+        beforeEnter: (to, from) => {
+            store.dispatch("clearAuth");
+            location.reload();
+        }
+    },
+    { path: "/register", name: "register", component: RegisterView },
 ]
 
 const router = createRouter({
