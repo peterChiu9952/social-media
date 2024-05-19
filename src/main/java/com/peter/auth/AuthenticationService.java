@@ -2,8 +2,8 @@ package com.peter.auth;
 
 import com.peter.jwt.JWTUtil;
 import com.peter.user.User;
-import com.peter.user.UserDTO;
-import com.peter.user.UserDTOMapper;
+import com.peter.user.UserResponse;
+import com.peter.user.UserResponseMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
-    private final UserDTOMapper userDTOMapper;
+    private final UserResponseMapper userResponseMapper;
     private final JWTUtil jwtUtil;
 
-    public AuthenticationService(AuthenticationManager authenticationManager, UserDTOMapper userDTOMapper, JWTUtil jwtUtil) {
+    public AuthenticationService(AuthenticationManager authenticationManager, UserResponseMapper userResponseMapper, JWTUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
-        this.userDTOMapper = userDTOMapper;
+        this.userResponseMapper = userResponseMapper;
         this.jwtUtil = jwtUtil;
     }
 
@@ -30,9 +30,9 @@ public class AuthenticationService {
                 )
         );
         User principal = (User) authenticate.getPrincipal();
-        UserDTO userDTO = userDTOMapper.apply(principal);
-        String token = jwtUtil.issueToken(userDTO.username());
+        UserResponse userResponse = userResponseMapper.apply(principal);
+        String token = jwtUtil.issueToken(userResponse.username());
 
-        return new AuthenticationResponse(token, userDTO.userId());
+        return new AuthenticationResponse(token, userResponse.userId());
     }
 }

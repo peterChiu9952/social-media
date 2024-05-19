@@ -1,6 +1,6 @@
 package com.peter.user;
 
-public record UserDTO(
+public record UserResponse(
         Long userId,
         String username,
         String email,

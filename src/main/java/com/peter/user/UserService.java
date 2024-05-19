@@ -12,25 +12,25 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserDao userDao;
-    private final UserDTOMapper userDTOMapper;
+    private final UserResponseMapper userResponseMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserDao userDao, UserDTOMapper userDTOMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserDao userDao, UserResponseMapper userResponseMapper, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
-        this.userDTOMapper = userDTOMapper;
+        this.userResponseMapper = userResponseMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<UserDTO> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userDao.selectAllUsers()
                 .stream()
-                .map(userDTOMapper)
+                .map(userResponseMapper)
                 .collect(Collectors.toList());
     }
 
-    public UserDTO getUserByUserId(long userId) {
+    public UserResponse getUserByUserId(long userId) {
         return userDao.selectUserByUserId(userId)
-                .map(userDTOMapper)
+                .map(userResponseMapper)
                 .orElseThrow(() -> new ResourceNotFoundException("userId " + userId + " not found"));
     }
 

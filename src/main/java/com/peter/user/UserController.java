@@ -1,7 +1,6 @@
 package com.peter.user;
 
 import com.peter.jwt.JWTUtil;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,23 +20,21 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDTO> getUsers() {
+    public List<UserResponse> getUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("{userid}")
-    public ResponseEntity<UserDTO> getUserByUserId(@PathVariable long userid) {
-        UserDTO userDTO = userService.getUserByUserId(userid);
+    public ResponseEntity<UserResponse> getUserByUserId(@PathVariable long userid) {
+        UserResponse userResponse = userService.getUserByUserId(userid);
         return ResponseEntity.ok()
-                .body(userDTO);
+                .body(userResponse);
     }
 
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserRequest request) {
         userService.createUser(request);
-//        String jwtToken = jwtUtil.issueToken(request.username(), "ROLE_USER");
         return ResponseEntity.ok()
-//                .header(HttpHeaders.AUTHORIZATION, jwtToken)
                 .build();
     }
 }
