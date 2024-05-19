@@ -8,8 +8,9 @@ const props = defineProps({
     post: {
         postId: Number,
         userId: Number,
+        username: String,
         content: String,
-        createdAt: String,
+        createdAt: Date,
     },
 });
 const emit = defineEmits(["refresh"])

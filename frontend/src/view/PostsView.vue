@@ -20,7 +20,10 @@ const handleCreatePost = () => {
 
 const refresh = () => {
     getPosts().then((res) => {
-        posts.value = res.data;
+        posts.value = res.data.map((post) => ({
+            ...post,
+            createdAt: new Date(post.createdAt).toLocaleString(),
+        }));
     });
 };
 
