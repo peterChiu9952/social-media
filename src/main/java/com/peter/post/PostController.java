@@ -1,5 +1,6 @@
 package com.peter.post;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class PostController {
     }
 
     @PostMapping
-    public void createPost(@RequestBody PostRequest request, @RequestHeader("Authorization") String token) {
+    public void createPost(@RequestBody @Valid PostRequest request, @RequestHeader("Authorization") String token) {
         postService.createPost(request, token);
     }
 
@@ -31,7 +32,7 @@ public class PostController {
     }
 
     @PutMapping("{postId}")
-    public void updatePost(@PathVariable Long postId, @RequestBody PostRequest request, @RequestHeader("Authorization") String token) {
+    public void updatePost(@PathVariable Long postId, @RequestBody @Valid PostRequest request, @RequestHeader("Authorization") String token) {
         postService.updatePost(postId, request, token);
     }
 }

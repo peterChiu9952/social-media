@@ -1,5 +1,6 @@
 package com.peter.comment;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public void createComment(@RequestBody CommentRequest request, @RequestHeader("Authorization") String token) {
+    public void createComment(@RequestBody @Valid CommentRequest request, @RequestHeader("Authorization") String token) {
         commentService.createComment(request, token);
     }
 }
