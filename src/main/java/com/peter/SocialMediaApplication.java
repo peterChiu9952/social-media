@@ -22,17 +22,18 @@ public class SocialMediaApplication {
 		SpringApplication.run(SocialMediaApplication.class, args);
 	}
 
+	// Initialize database
 	@Bean
 	CommandLineRunner runner(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository, PasswordEncoder passwordEncoder) {
 		return args -> {
 			User user1 = new User(
-					"user1",
+					"0912345678",
 					"user1@mail.com",
 					passwordEncoder.encode("password"),
 					""
 			);
 			User user2 = new User(
-					"user2",
+					"0987654321",
 					"user2@mail.com",
 					passwordEncoder.encode("password"),
 					""
