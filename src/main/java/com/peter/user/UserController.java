@@ -1,6 +1,5 @@
 package com.peter.user;
 
-import com.peter.jwt.JWTUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,11 +11,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final JWTUtil jwtUtil;
 
-    public UserController(UserService userService, JWTUtil jwtUtil) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping
