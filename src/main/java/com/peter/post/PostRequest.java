@@ -1,4 +1,6 @@
 package com.peter.post;
 
-public record PostRequest(String content) {
+import jakarta.validation.constraints.NotBlank;
+
+public record PostRequest(@NotBlank String content) {
 }

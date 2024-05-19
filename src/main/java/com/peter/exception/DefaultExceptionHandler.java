@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -67,6 +69,28 @@ public class DefaultExceptionHandler {
         ApiError apiError = new ApiError(
                 request.getRequestURI(),
                 e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException e,
+                                                               HttpServletRequest request) {
+        StringBuilder errorMessage = new StringBuilder();
+        e.getBindingResult().getAllErrors().forEach((error) -> {
+            if (!errorMessage.isEmpty()) {
+                errorMessage.append(", ");
+            }
+            errorMessage.append(((FieldError) error).getField());
+            errorMessage.append(": ");
+            errorMessage.append(error.getDefaultMessage());
+        });
+
+        ApiError apiError = new ApiError(
+                request.getRequestURI(),
+                errorMessage.toString(),
                 HttpStatus.BAD_REQUEST.value(),
                 LocalDateTime.now()
         );
